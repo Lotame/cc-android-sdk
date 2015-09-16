@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- From: file:/Users/kevin/Documents/sdk-workspace/cc-android-sdk/src/main/res/values/strings.xml -->
-    <eat-comment/>
-    <string name="app_name">cc-sdk</string>
-    <!-- From: file:/Users/kevin/Documents/sdk-workspace/cc-android-sdk/src/main/res/values/styles.xml -->
-    <eat-comment/>
-    <style name="AppTheme" parent="android:Theme.Light"/>
-</resources>
