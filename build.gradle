@@ -6,11 +6,39 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.2'
+        // Required plugins added to classpath to facilitate pushing to Jcenter/Bintray
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
     }
 }
 
 apply plugin: 'com.android.library'
-apply from: 'maven-push.gradle'
+
+ext {
+    bintrayRepo = 'cc-android-sdk'
+    bintrayName = 'cc-android-sdk'   // Has to be same as your library module name
+
+    publishedGroupId = 'com.lotame'
+    libraryName = 'LotameCrowdControlAndroidSDK'
+    artifact = 'cc-android-sdk'     // Has to be same as your library module name
+
+    libraryDescription = 'Lotame Platform Android SDK that enables sending data to Lotame from Android mobile apps.'
+
+    // Your github repo link
+    siteUrl = 'https://github.com/Lotame/cc-android-sdk'
+    gitUrl = 'https://github.com/Lotame/cc-android-sdk.git'
+    githubRepository= 'Lotame/cc-android-sdk'
+
+    libraryVersion = '2.3.0.0'
+
+    developerId = 'Lotame'
+    developerName = 'Lotame'
+    developerEmail = 'info@lotame.com'
+
+    licenseName = 'MIT License'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+}
 
 android {
     compileSdkVersion 25
@@ -51,3 +79,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.google.android.gms:play-services-ads:10.2.6'
 }
+
+apply from: 'maven-install.gradle'
+apply from: 'bintray-push.gradle'

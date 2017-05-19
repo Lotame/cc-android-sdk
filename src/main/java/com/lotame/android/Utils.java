@@ -33,7 +33,7 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Utils {
     public static String getUuid(Context context) {
-        String udid = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+        String udid =  Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
         return sha1(udid);
     }
 

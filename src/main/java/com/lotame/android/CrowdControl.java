@@ -46,27 +46,27 @@ import java.util.concurrent.TimeUnit;
  * Lotame Platform data collection and audience extraction API for Android. This
  * library provides methods to collect, transmit, and extract data managed by
  * the Lotame Platform.
- * <p/>
+ * 
  * The SDK will attempt to access the Google Advertising ID and the Limit Ad
  * Tracking user preferences.  These are specific to platforms running the
  * Google Play Services 4.0+.  If the SDK determines that the Limit Ad Tracking
  * preference is set to true, the SDK will NOT collect, send, or extract any
  * Crowd Control managed data.
- * <p/>
+ * 
  * The SDK does provide a mechanism for the client to determine whether or not
  * an Advertising ID was gleaned, {@link #isGoogleAdvertiserIdAvailable()},
  * and whether or not the user has opted-out of ad collection,
  * {@link #isLimitedAdTrackingEnabled()}.
- * <p/>
+ * 
  * Client code should check that the value of {@link #isInitialized()} is true
  * before attempting to send data or extract audience segments.  Adding data to
  * the CrowdControl instance via {@link #add(String, String)},
  * {@link #addBehavior(long)}, or {@link #addOpportunity(long)} is permitted
  * prior to the CrowdControl instance returning true for
  * {@link #isInitialized()}.
- * <p/>
+ * 
  * The general pattern of use is:
- * <p/>
+ * 
  * <pre>
  *  {#code
  *  CrowdControl cc = new CrowdControl(this, CLIENT_ID);
@@ -80,13 +80,13 @@ import java.util.concurrent.TimeUnit;
  *  cc.bcp();
  * }
  * </pre>
- * <p/>
+ * 
  * By default instances of CrowdControl will make bcp and extraction calls over
  * HTTPS.
- * <p/>
+ * 
  * Instantiating with an instance of {@link CrowdControl.Protocol}, will enable
  * the use of either http or https.
- * <p/>
+ * 
  * <pre>
  * {#code
  * // Instantiate a cc instance configured for https calls.
@@ -369,7 +369,7 @@ public class CrowdControl {
     /**
      * Will return either the Advertiser ID or the SHA-1 hash of the value
      * returned by the Secure.ANDROID_ID android field.
-     * <p/>
+     * 
      * This method always returns immediately, whether or not the id field
      * has yet been populated by the completion of the construction of the
      * CrowdControl instance.
@@ -378,7 +378,6 @@ public class CrowdControl {
      * available), or null if an id has not yet been generated.
      * (the id is generated asynchronously upon instantiation of the
      * CrowdControl instance).
-     * @see Secure.ANDROID_ID.
      */
     public String getId() {
         if (id == null) {
@@ -404,7 +403,7 @@ public class CrowdControl {
 
     /**
      * Adds key/value to track. This can be called multiple times to add multiple behaviors to track.
-     * <p/>
+     * 
      * If the {@link #isLimitedAdTrackingEnabled()} returns true, this method
      * will return without collecting any data.
      *
@@ -431,7 +430,7 @@ public class CrowdControl {
     /**
      * Add a behavior to track by id. This is only honored if the CLIENT_ID used to construct the library has access to the behavior with
      * the supplied id. This can be called multiple times to add multiple behaviors to track.
-     * <p/>
+     * 
      * This method, in turn, calls the {@link #add(String, String)} method,
      * which will check the {@link #isLimitedAdTrackingEnabled()}.  If that
      * method returns true in {@link #add(String, String)}, it will return
@@ -456,10 +455,10 @@ public class CrowdControl {
     /**
      * Synchronously retrieve audience membership. The JSON format is described at
      * <a href="http://help.lotame.com/display/HELP/Audience+Extraction+API">Audience Extraction API</a>
-     * <p/>
+     * 
      * If {@link #isLimitedAdTrackingEnabled()} returns true, this method
      * will return null without making an audience extraction call.
-     * <p/>
+     * 
      * If {@link #isInitialized()} returns false, the method will also return
      * null without making an extraction call.
      *
@@ -492,10 +491,10 @@ public class CrowdControl {
     /**
      * Synchronously send the data to the Crowd Control servers. To send
      * asynchronously, use {@link #bcpAsync()}.
-     * <p/>
+     * 
      * If {@link #isLimitedAdTrackingEnabled()} returns true, this method will
      * silently return without collecting any data.
-     * <p/>
+     * 
      * If {@link #isInitialized()} returns false, the method will also silently
      * return without collecting any data.
      *
@@ -515,10 +514,10 @@ public class CrowdControl {
 
     /**
      * Send the data to the Crowd Control servers.
-     * <p/>
+     * 
      * If {@link #isLimitedAdTrackingEnabled()} returns true, this method will
      * return null without collecting any data.
-     * <p/>
+     * 
      * If {@link #isInitialized()} returns false, the method will also silently
      * return without collecting any data.
      *
@@ -582,7 +581,7 @@ public class CrowdControl {
      * Indicates whether the CrowdControl instance has completed it's
      * initialization and whether it is ready to send and extract audience
      * data.
-     * <p/>
+     * 
      * Until isInitialized() returns true, no behavior data can be sent, or
      * audience data extracted.  Adding data vi via
      * {@link #add(String, String)}, {@link #addBehavior(long)}, or
