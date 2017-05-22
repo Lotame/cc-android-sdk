@@ -29,7 +29,8 @@ ext {
     gitUrl = 'https://github.com/Lotame/cc-android-sdk.git'
     githubRepository= 'Lotame/cc-android-sdk'
 
-    libraryVersion = '2.3.0.0'
+    libraryVersionCode = 5
+    libraryVersion = '2.3.0.2'
 
     developerId = 'Lotame'
     developerName = 'Lotame'
@@ -47,8 +48,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 3
-        versionName "${VERSION_NAME}"
+        versionCode rootProject.ext.libraryVersionCode
+        versionName "${rootProject.ext.libraryVersion}"
     }
 
     buildTypes {
@@ -60,22 +61,12 @@ android {
 }
 
 task jar(type: Jar) {
-    archiveName "cc-android-sdk-${VERSION_NAME}.jar"
+    archiveName "cc-android-sdk-${rootProject.ext.libraryVersion}.jar"
     from android.sourceSets.main.java.srcDirs
 }
 
-android.libraryVariants.all { variant ->
-    def name = variant.buildType.name
-    if (name == BuilderConstants.DEBUG) {
-        return // Skip debug builds.
-    }
-    def task = project.tasks.create "jar${name.capitalize()}", Jar
-    task.dependsOn variant.javaCompile
-    task.from variant.javaCompile.destinationDir
-    artifacts.add('archives', task)
-}
-
 dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.google.android.gms:play-services-ads:10.2.6'
 }
