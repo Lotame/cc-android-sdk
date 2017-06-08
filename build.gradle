@@ -72,4 +72,7 @@ dependencies {
 }
 
 apply from: 'maven-install.gradle'
-apply from: 'bintray-push.gradle'
+
+if(project.rootProject.file('bintray.properties').exists()) {
+    apply from: 'bintray-push.gradle'
+}
