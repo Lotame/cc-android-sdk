@@ -1,5 +1,3 @@
-import com.android.builder.core.BuilderConstants;
-
 buildscript {
     repositories {
         jcenter()
@@ -48,8 +46,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode rootProject.ext.libraryVersionCode
-        versionName "${rootProject.ext.libraryVersion}"
+        versionCode project.ext.libraryVersionCode
+        versionName "${project.ext.libraryVersion}"
     }
 
     buildTypes {
@@ -60,9 +58,14 @@ android {
     }
 }
 
-task jar(type: Jar) {
-    archiveName "cc-android-sdk-${rootProject.ext.libraryVersion}.jar"
-    from android.sourceSets.main.java.srcDirs
+android.libraryVariants.all { variant ->
+    task("jar${variant.name}", type: Jar) {
+        description "Bundles compiled .class files into a JAR file for $variant.name."
+        dependsOn variant.javaCompile
+        from variant.javaCompile.destinationDir
+        archiveName "cc-android-sdk-${project.ext.libraryVersion}.jar"
+        exclude '**/R.class', '**/R$*.class', '**/R.html', '**/R.*.html'
+    }
 }
 
 dependencies {
@@ -73,6 +76,6 @@ dependencies {
 
 apply from: 'maven-install.gradle'
 
-if(project.rootProject.file('bintray.properties').exists()) {
+if(project.file('bintray.properties').exists()) {
     apply from: 'bintray-push.gradle'
 }

@@ -1,13 +1,26 @@
+[ ![Download](https://api.bintray.com/packages/lotame/cc-android-sdk/cc-android-sdk/images/download.svg) ](https://bintray.com/lotame/cc-android-sdk/cc-android-sdk/_latestVersion)
+
 # Android SDK
 
 This project contains Lotame Platform Android SDK jar to be provided to clients to enable them to more easily send data from Android mobile apps.
 
+## Including library in your project
 
-## Development Environment Set-up
+Add the library as a dependency in gradle, it is in jcenter and maven central:
+
+```
+compile 'com.lotame:cc-android-sdk:2.3.0.2'
+```
+
+Alternatively, you can build the jar manually from the code with `./gradlew clean jarRelease`. The jar file
+will be available in the build\libs directory. Then you can add that jar as a library to another project.
+
+Details for using the library are in the JavaDoc for the CrowdControl class, and in the help wiki at http://help.lotame.com/display/HELP/Mobile+SDK%27s
+
+## Maintainers Development Environment Set-up
 
 ### Android Studio
 To make changes to this project, you must first install the Android Studio http://developer.android.com/tools/studio/index.html
-
 
 ### Open
 Once Android Studio is installed, open the sdk project. Android Studio will prompt you for missing requirements such as google play services repository. Follow the steps it suggests.
@@ -15,7 +28,7 @@ Once Android Studio is installed, open the sdk project. Android Studio will prom
 Details for using the library are in the JavaDoc for the CrowdControl class, and in the help wiki at http://help.lotame.com/display/HELP/Mobile+SDK%27s
 
 ## Building
-Use `gradle clean jar` to build a jar file in the build\libs directory.  Modify build.gradle to change the output file name.
+Use `./gradlew clean jarRelease` to build a jar file in the build\libs directory.  Modify build.gradle to change the output file name.
 
 ## Testing
 
@@ -58,3 +71,26 @@ Click run in Android Studio and choose a connected device
 {"Profile":{"tpid":"606d0a5804c0224c7d5b575e73a11b71","Audiences":{"Audience":[{"id":"47280","abbr":"all"}]}}}
 ```
 	- Returning valid JSON indicates a successful test.
+
+## Note to maintainers
+
+To update jcenter/mavencentral, create a `bintray.properties` file in the project's root level with the following information:
+```
+bintray.user=<your_bintray_username>
+bintray.apikey=<your_bintray_apikey>
+```
+
+Update the ext.libraryVersion and ext.libraryVersionCode to the desired version numbers in build.gradle.
+
+As long as you are part of the https://bintray.com/lotame organization, you will be able to run the following command
+to publish the package:
+
+```
+./gradlew clean build install bintrayUpload
+```
+
+Then, sync with maven central through the bintray website: https://bintray.com/lotame/cc-android-sdk/cc-android-sdk#central
+
+If you run into trouble, this guide may be helpful: http://crushingcode.nisrulz.com/publish-your-android-library-via-jcenter/
+
+
