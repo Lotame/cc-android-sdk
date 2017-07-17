@@ -25,7 +25,7 @@ To make changes to this project, you must first install the Android Studio http:
 ### Open
 Once Android Studio is installed, open the sdk project. Android Studio will prompt you for missing requirements such as google play services repository. Follow the steps it suggests.
 
-Details for using the library are in the JavaDoc for the CrowdControl class, and in the help wiki at http://help.lotame.com/display/HELP/Mobile+SDK%27s
+Details for using the library are in the JavaDoc for the [CrowdControl class](src/main/java/com/lotame/android/CrowdControl.java).
 
 ## Building
 Use `./gradlew clean jarRelease` to build a jar file in the build\libs directory.  Modify build.gradle to change the output file name.
