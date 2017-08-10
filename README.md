@@ -15,7 +15,70 @@ compile 'com.lotame:cc-android-sdk:2.3.0.3@aar'
 Alternatively, you can build the jar manually from the code with `./gradlew clean jarRelease`. The jar file
 will be available in the build\libs directory. Then you can add that jar as a library to another project.
 
-Details for using the library are in the JavaDoc for the CrowdControl class, and in the help wiki at http://help.lotame.com/display/HELP/Mobile+SDK%27s
+Incorporate the following general pattern into your app to collect and transmit data to Lotame, replacing CLIENT_ID with the id provided by Lotame: 
+```
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import android.app.Activity;
+import android.os.Bundle;
+import com.lotame.android.CrowdControl;
+import com.lotame.android.CrowdControl.Protocol;
+
+public class SampleActivity extends Activity {
+    private static final int CLIENT_ID = <YourClientID>;
+    private static final int TIMEOUT_MILLIS = 5000;
+    private CrowdControl ccHttp;
+    private CrowdControl ccHttps;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        // 'this' can be passed in as the CrowdControl constructor's first
+        // argument because this extends android.content.Context.
+        // Because no protocol is specified, HTTP will be used.
+        ccHttp  = new CrowdControl(this, CLIENT_ID);
+
+        // Instantiating a CrowdControl instance configured for HTTPS
+        ccHttps = new CrowdControl(this, CLIENT_ID, Protocol.HTTPS);
+    }
+
+    public void collectAndSendSomethingInteresting() throws IOException
+    {
+        // Add data points to collect.  This can be called any number of times
+        ccHttp.add("seg","poweruser");
+
+        if (ccHttp.isInitialized()) {
+            // Optional check that the CrowdControl instance has been initialized.
+            // Transfer data to Lotame servers.  This will transfer all data
+            // provided via add since the last call to bcp().  Use bcpAsync()
+            // for asynchronous send.
+
+            ccHttp.bcp();
+        }
+    }
+
+    /**
+    * @return String a JSON representation of the audience info for the current id
+    */
+    public String getAudienceInfo() throws IOException
+    {
+        return ccHttp.getAudienceJSON(TIMEOUT_MILLIS, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        ccHttp.startSession();
+    }
+}
+```
+Call startSession() whenever the user initiates a new session by your definition of a session.  For every session, the first call to bcp() or bcpAsync() will count as a "Page View" in the DMP stats.
+
+
+Additional details for using the library are in the JavaDoc for the [CrowdControl class](src/main/java/com/lotame/android/CrowdControl.java)
 
 ## Maintainers Development Environment Set-up
 
@@ -25,7 +88,6 @@ To make changes to this project, you must first install the Android Studio http:
 ### Open
 Once Android Studio is installed, open the sdk project. Android Studio will prompt you for missing requirements such as google play services repository. Follow the steps it suggests.
 
-Details for using the library are in the JavaDoc for the CrowdControl class, and in the help wiki at http://help.lotame.com/display/HELP/Mobile+SDK%27s
 
 ## Building
 Use `./gradlew clean jarRelease` to build a jar file in the build\libs directory.  Modify build.gradle to change the output file name.
