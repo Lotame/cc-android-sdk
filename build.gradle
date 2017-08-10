@@ -27,8 +27,8 @@ ext {
     gitUrl = 'https://github.com/Lotame/cc-android-sdk.git'
     githubRepository= 'Lotame/cc-android-sdk'
 
-    libraryVersionCode = 5
-    libraryVersion = '2.3.0.2'
+    libraryVersionCode = 6
+    libraryVersion = '2.3.0.3'
 
     developerId = 'Lotame'
     developerName = 'Lotame'
@@ -58,18 +58,20 @@ android {
     }
 }
 
+task jar(type: Jar) {
+    archiveName "cc-android-sdk-${project.ext.libraryVersion}.jar"
+    from android.sourceSets.main.java.srcDirs
+}
+
 android.libraryVariants.all { variant ->
-    task("jar${variant.name}", type: Jar) {
-        description "Bundles compiled .class files into a JAR file for $variant.name."
-        dependsOn variant.javaCompile
-        from variant.javaCompile.destinationDir
-        archiveName "cc-android-sdk-${project.ext.libraryVersion}.jar"
-        exclude '**/R.class', '**/R$*.class', '**/R.html', '**/R.*.html'
-    }
+    def name = variant.buildType.name
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.javaCompile
+    task.from variant.javaCompile.destinationDir
+    artifacts.add('archives', task)
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.google.android.gms:play-services-ads:10.2.6'
 }
