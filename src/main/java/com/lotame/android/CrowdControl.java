@@ -127,6 +127,7 @@ public class CrowdControl {
     private static final String VALUE_YES = "y";
     private static final String VALUE_APP = "app";
     private static final String BCP_SUBDOMAIN = "bcp.";
+    private static final String PIXEL_DOMAIN = "lotamedmp.com";
     private static final String AE_SUBDOMAIN = "ad.";
     private static final String DEFAULT_DOMAIN = "crwdcntrl.net";
     private static final String BCP_SERVLET = "5";
@@ -484,6 +485,30 @@ public class CrowdControl {
             if (CrowdControl.debug)
                 Log.e(CrowdControl.LOG_TAG, "Error retrieving audience data", e);
             return null;
+        }
+    }
+
+    /**
+     * Call to Pixel server.
+     *
+     * @throws IOException
+     */
+
+    public void sendPixelRequest() throws Exception {
+
+        String url = MessageFormat.format(protocol.getProtocString() +
+                "://" + BCP_SUBDOMAIN + PIXEL_DOMAIN + "/cc?mid={0}&dt={1}", getId(), getIdType().toString());
+
+        try {
+
+            final Map<String, String> pixelUrlParameters = new HashMap<>();
+
+            SendOverHTTP sender = new SendOverHTTP(pixelUrlParameters, CONNECTION_TIMEOUT);
+            sender.execute(url);
+
+        } catch (Exception e) {
+            if (CrowdControl.debug)
+                Log.e(CrowdControl.LOG_TAG, "Error Sending Pixel Data", e);
         }
     }
 
