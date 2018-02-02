@@ -80,6 +80,9 @@ Call startSession() whenever the user initiates a new session by your definition
 
 Additional details for using the library are in the JavaDoc for the [CrowdControl class](src/main/java/com/lotame/android/CrowdControl.java)
 
+### Vodafone Integration
+For Vodafone integration call ccHttp.sendPixelRequest(); method.
+
 ## Maintainers Development Environment Set-up
 
 ### Android Studio
