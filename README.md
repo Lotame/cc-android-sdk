@@ -80,6 +80,12 @@ Call startSession() whenever the user initiates a new session by your definition
 
 Additional details for using the library are in the JavaDoc for the [CrowdControl class](src/main/java/com/lotame/android/CrowdControl.java)
 
+### Send an HTTP or HTTPs request using the supplied URL pattern
+This pattern can contain two replacement macros, {deviceid} and {deviceidtype}, which will be replaced before performing the HTTP(s) call.
+```
+ccHttp.sendRequest("http://xyz.com/getData?mid={deviceid}&dt={deviceidtype}");
+```
+
 ## Maintainers Development Environment Set-up
 
 ### Android Studio

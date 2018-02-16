@@ -537,6 +537,35 @@ public class CrowdControl {
         return sender;
     }
 
+    /**
+     * Send an HTTP or HTTPs request using the supplied URL pattern.
+     * This pattern can contain two replacement macros, {deviceid} and {deviceidtype},
+     * which will be replaced before performing the HTTP(s) call.
+     */
+    public void sendRequest(String urlPattern) throws Exception {
+
+        if (isLimitedAdTrackingEnabled() || !isInitialized()) {
+            return;
+        }
+
+        if(!getId().isEmpty() && !getIdType().toString().isEmpty()) {
+
+            String newUrlPattern = urlPattern.replace("{deviceid}", getId()).replace("{deviceidtype}", getIdType().toString());
+
+            try {
+
+                final Map<String, String> newUrlPatternParameters = new HashMap<>();
+
+                SendOverHTTP sender = new SendOverHTTP(newUrlPatternParameters, CONNECTION_TIMEOUT);
+                sender.execute(newUrlPattern);
+
+            } catch (Exception e) {
+                if (CrowdControl.debug)
+                    Log.e(CrowdControl.LOG_TAG, "Error Sending sendRequest", e);
+            }
+        }
+    }
+
     private synchronized String buildBcpUrl() {
         /**
          * Merge the queued data to onto the base url
