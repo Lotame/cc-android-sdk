@@ -133,7 +133,7 @@ Click run in Android Studio and choose a connected device
 - Click 'Start New Session' to set up the CrowdControl library
 - Click 'Add'
 - Click 'Send'
-- This should send a bcp call with the male behavior for client 4710
+- This should send a bcp call with the male behavior for client 4170
 - Click 'Extract'.  Below the 'Start New Session' button you should see a JSON object representing the result of the audience extraction call similar to the following:
 ```
 {"Profile":{"tpid":"606d0a5804c0224c7d5b575e73a11b71","Audiences":{"Audience":[{"id":"47280","abbr":"all"}]}}}
