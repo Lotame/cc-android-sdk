@@ -1,13 +1,18 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:4.2.2'
         // Required plugins added to classpath to facilitate pushing to Jcenter/Bintray
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+        // classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
     }
+}
+
+plugins {
+    id 'maven-publish'
 }
 
 apply plugin: 'com.android.library'
@@ -17,7 +22,7 @@ ext {
     bintrayName = 'cc-android-sdk'   // Has to be same as your library module name
 
     publishedGroupId = 'com.lotame'
-    libraryName = 'LotameCrowdControlAndroidSDK'
+    libraryName = 'LotameAndroidSDK'
     artifact = 'cc-android-sdk'     // Has to be same as your library module name
 
     libraryDescription = 'Lotame Platform Android SDK that enables sending data to Lotame from Android mobile apps.'
@@ -27,8 +32,8 @@ ext {
     gitUrl = 'https://github.com/Lotame/cc-android-sdk.git'
     githubRepository= 'Lotame/cc-android-sdk'
 
-    libraryVersionCode = 6
-    libraryVersion = '2.3.0.3'
+    libraryVersionCode = 30
+    libraryVersion = '2.4.0.0'
 
     developerId = 'Lotame'
     developerName = 'Lotame'
@@ -40,12 +45,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 25
+        minSdkVersion 28
+        targetSdkVersion 30
         versionCode project.ext.libraryVersionCode
         versionName "${project.ext.libraryVersion}"
     }
@@ -66,14 +71,20 @@ task jar(type: Jar) {
 android.libraryVariants.all { variant ->
     def name = variant.buildType.name
     def task = project.tasks.create "jar${name.capitalize()}", Jar
-    task.dependsOn variant.javaCompile
-    task.from variant.javaCompile.destinationDir
+    task.dependsOn variant.javaCompileProvider
+    task.from variant.javaCompile.destinationDirectory
     artifacts.add('archives', task)
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-ads:10.2.6'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'com.google.android.gms:play-services-ads:20.2.0'
+    implementation 'com.google.guava:listenablefuture:1.0'
+}
+
+repositories {
+    google()
+    mavenCentral()
 }
 
 apply from: 'maven-install.gradle'
