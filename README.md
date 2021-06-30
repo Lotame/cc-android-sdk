@@ -12,7 +12,7 @@ Add the library as a dependency in gradle, it is in jcenter and maven central:
 compile 'com.lotame:cc-android-sdk:2.4.0.0@aar'
 ```
 
-Alternatively, you can build the jar manually from the code with `./gradlew clean jarRelease`. The jar file
+Alternatively, you can build the jar manually from the code with `./gradlew clean jar`. The jar file
 will be available in the build\libs directory. Then you can add that jar as a library to another project.
 
 Incorporate the following general pattern into your app to collect and transmit data to Lotame, replacing CLIENT_ID with the id provided by Lotame: 
