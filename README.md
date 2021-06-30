@@ -1,5 +1,3 @@
-[ ![Download](https://api.bintray.com/packages/lotame/cc-android-sdk/cc-android-sdk/images/download.svg) ](https://bintray.com/lotame/cc-android-sdk/cc-android-sdk/_latestVersion)
-
 # Android SDK
 
 This project contains Lotame Platform Android SDK jar to be provided to clients to enable them to more easily send data from Android mobile apps.
