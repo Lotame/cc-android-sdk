@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  *
  * The MIT License (MIT)
  *
- *  Copyright (c) 2015 Lotame
+ *  Copyright (c) 2021 Lotame
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -122,6 +122,7 @@ public class CrowdControl {
     private static final String KEY_ENV_ID = "e";
     private static final String KEY_DEVICE_TYPE = "dt";
     private static final String KEY_SDK_VERSION = "sdk";
+    private static final String KEY_PANORAMA_ID =  "rid";
 
     private static final String SDK_VERSION = "2.0";
     private static final String VALUE_YES = "y";
@@ -143,6 +144,7 @@ public class CrowdControl {
     private Context context;
     private StringBuilder url;
     private int clientId = -1;
+    private int audienceExtractionClientId = -1;
     private String domain = null;
 
     protected static boolean debug = false;
@@ -184,6 +186,9 @@ public class CrowdControl {
 
     private boolean googleAdvertiserIdAvailable;
 
+    // Denotes whether or not to expect the panorama id from the audience extraction api.
+    private boolean enablePanoramaId = false;
+
     private Protocol protocol;
     private final static Protocol PROTOCOL_DEFAULT = Protocol.HTTP;
 
@@ -206,6 +211,18 @@ public class CrowdControl {
         this(ctx, clientId, PROTOCOL_DEFAULT);
     }
 
+    public CrowdControl(Context ctx, int clientId, boolean enablePanoramaId) {
+        this(ctx, clientId, clientId, enablePanoramaId);
+    }
+
+    public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId) {
+        this(ctx, clientId, audienceExtractionClientId, false);
+    }
+
+    public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, boolean enablePanoramaId) {
+        init(ctx, clientId, audienceExtractionClientId, PROTOCOL_DEFAULT, DEFAULT_DOMAIN, enablePanoramaId);
+    }
+
     /**
      * Constructs a CrowdControl instance for the supplied client id that
      * is configured with the supplied {@link Protocol} [http|https].
@@ -215,7 +232,7 @@ public class CrowdControl {
      * @param protocol
      */
     public CrowdControl(Context ctx, int clientId, Protocol protocol) {
-        init(ctx, clientId, protocol, DEFAULT_DOMAIN);
+        this(ctx, clientId, protocol, DEFAULT_DOMAIN);
     }
 
     /**
@@ -230,15 +247,17 @@ public class CrowdControl {
      * @param domain
      */
     public CrowdControl(Context ctx, int clientId, Protocol protocol, String domain) {
-        init(ctx, clientId, protocol, domain);
+        init(ctx, clientId, clientId, protocol, domain, false);
     }
 
-    private void init(Context ctx, int clientId, Protocol protocol, String domain) {
+    private void init(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, String domain, boolean enablePanoramaId) {
         setInitialized(false);
         this.setContext(ctx);
         this.clientId = clientId;
+        this.audienceExtractionClientId = audienceExtractionClientId;
         this.protocol = protocol;
         this.domain = domain;
+        this.enablePanoramaId = enablePanoramaId;
 
         //
         // On a separate Thread we will initialize the SDK, getting the id
@@ -454,7 +473,7 @@ public class CrowdControl {
 
     /**
      * Synchronously retrieve audience membership. The JSON format is described at
-     * <a href="http://help.lotame.com/display/HELP/Audience+Extraction+API">Audience Extraction API</a>
+     * <a href="https://my.lotame.com/t/x2hx20x/audience-extraction-api">Audience Extraction API</a>
      * 
      * If {@link #isLimitedAdTrackingEnabled()} returns true, this method
      * will return null without making an audience extraction call.
@@ -473,8 +492,16 @@ public class CrowdControl {
             return null;
         }
 
-        String url = MessageFormat.format(protocol.getProtocString() +
-                "://" + AE_SUBDOMAIN + getDomain() + "/5/pe=y/c={0}/mid={1}", String.valueOf(getClientId()), getId());
+        String url = null;
+        if (enablePanoramaId) {
+            url = MessageFormat.format(protocol.getProtocString() +
+                            "://" + AE_SUBDOMAIN + getDomain() + "/5/pe=y/c={0}/mid={1}/rid={2}",
+                    String.valueOf(getAudienceExtractionClientId()), getId(), VALUE_YES);
+        } else {
+            url = MessageFormat.format(protocol.getProtocString() +
+                            "://" + AE_SUBDOMAIN + getDomain() + "/5/pe=y/c={0}/mid={1}",
+                    String.valueOf(getAudienceExtractionClientId()), getId());
+        }
 
         SendOverHTTP sender = new SendOverHTTP(headerParams, CONNECTION_TIMEOUT);
         sender.execute(url);
@@ -601,6 +628,10 @@ public class CrowdControl {
     public int getClientId() {
         return clientId;
     }
+
+    public int getAudienceExtractionClientId() { return audienceExtractionClientId; }
+
+    public boolean isEnablePanoramaId() {return enablePanoramaId; }
 
     public Protocol getProtocol() {
         return protocol;

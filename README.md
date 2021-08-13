@@ -1,5 +1,3 @@
-[ ![Download](https://api.bintray.com/packages/lotame/cc-android-sdk/cc-android-sdk/images/download.svg) ](https://bintray.com/lotame/cc-android-sdk/cc-android-sdk/_latestVersion)
-
 # Android SDK
 
 This project contains Lotame Platform Android SDK jar to be provided to clients to enable them to more easily send data from Android mobile apps.
@@ -9,10 +7,10 @@ This project contains Lotame Platform Android SDK jar to be provided to clients 
 Add the library as a dependency in gradle, it is in jcenter and maven central:
 
 ```
-compile 'com.lotame:cc-android-sdk:2.3.0.3@aar'
+compile 'com.lotame:cc-android-sdk:2.4.0.0@aar'
 ```
 
-Alternatively, you can build the jar manually from the code with `./gradlew clean jarRelease`. The jar file
+Alternatively, you can build the jar manually from the code with `./gradlew clean jar`. The jar file
 will be available in the build\libs directory. Then you can add that jar as a library to another project.
 
 Incorporate the following general pattern into your app to collect and transmit data to Lotame, replacing CLIENT_ID with the id provided by Lotame: 
@@ -136,7 +134,7 @@ Click run in Android Studio and choose a connected device
 - This should send a bcp call with the male behavior for client 4170
 - Click 'Extract'.  Below the 'Start New Session' button you should see a JSON object representing the result of the audience extraction call similar to the following:
 ```
-{"Profile":{"tpid":"606d0a5804c0224c7d5b575e73a11b71","Audiences":{"Audience":[{"id":"47280","abbr":"all"}]}}}
+{"Profile":{"panoramaId": "abcdefghijklmnopqrstuvwxyz1234567890", "tpid":"606d0a5804c0224c7d5b575e73a11b71","Audiences":{"Audience":[{"id":"47280","abbr":"all"}]}}}
 ```
 	- Returning valid JSON indicates a successful test.
 

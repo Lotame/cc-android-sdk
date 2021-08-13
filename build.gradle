@@ -8,6 +8,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'maven-publish'
+}
+
 apply plugin: 'com.android.library'
 
 ext {
@@ -15,7 +19,7 @@ ext {
     bintrayName = 'cc-android-sdk'   // Has to be same as your library module name
 
     publishedGroupId = 'com.lotame'
-    libraryName = 'LotameCrowdControlAndroidSDK'
+    libraryName = 'LotameAndroidSDK'
     artifact = 'cc-android-sdk'     // Has to be same as your library module name
 
     libraryDescription = 'Lotame Platform Android SDK that enables sending data to Lotame from Android mobile apps.'
@@ -60,8 +64,8 @@ task jar(type: Jar) {
 android.libraryVariants.all { variant ->
     def name = variant.buildType.name
     def task = project.tasks.create "jar${name.capitalize()}", Jar
-    task.dependsOn variant.javaCompile
-    task.from variant.javaCompile.destinationDir
+    task.dependsOn variant.javaCompileProvider
+    task.from variant.javaCompile.destinationDirectory
     artifacts.add('archives', task)
 }
 
