@@ -1,12 +1,10 @@
 buildscript {
     repositories {
-        jcenter()
+        google()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
-        // Required plugins added to classpath to facilitate pushing to Jcenter/Bintray
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.android.tools.build:gradle:4.2.0'
     }
 }
 
@@ -28,7 +26,10 @@ ext {
     githubRepository= 'Lotame/cc-android-sdk'
 
     libraryVersionCode = 6
-    libraryVersion = '2.3.0.3'
+    libraryVersion = '2.4.0.0'
+
+    pomVersion = '2.4.0.0'
+    pomGroupID = 'com.lotame'
 
     developerId = 'Lotame'
     developerName = 'Lotame'
@@ -40,21 +41,14 @@ ext {
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 29
     buildToolsVersion '25.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 29
         versionCode project.ext.libraryVersionCode
         versionName "${project.ext.libraryVersion}"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
     }
 }
 
@@ -72,12 +66,13 @@ android.libraryVariants.all { variant ->
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-ads:10.2.6'
+    api 'com.android.support:appcompat-v7:25.3.1'
+    api 'com.google.android.gms:play-services-ads:10.2.6'
+}
+
+repositories {
+    mavenCentral()
+    google()
 }
 
 apply from: 'maven-install.gradle'
-
-if(project.file('bintray.properties').exists()) {
-    apply from: 'bintray-push.gradle'
-}
