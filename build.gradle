@@ -30,9 +30,9 @@ ext {
     githubRepository= 'Lotame/cc-android-sdk'
 
     libraryVersionCode = 6
-    libraryVersion = '2.4.0.0'
+    libraryVersion = '2.4.0.1'
 
-    pomVersion = '2.4.0.0'
+    pomVersion = '2.4.0.1'
     pomGroupID = 'com.lotame'
 
     developerId = 'Lotame'
@@ -70,7 +70,7 @@ android.libraryVariants.all { variant ->
 }
 
 dependencies {
-    api 'com.android.support:appcompat-v7:25.3.1'
+    api 'androidx.appcompat:appcompat:1.0.0'
     api 'com.google.android.gms:play-services-ads:10.2.6'
 }
 
