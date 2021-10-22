@@ -30,9 +30,9 @@ ext {
     githubRepository= 'Lotame/cc-android-sdk'
 
     libraryVersionCode = 6
-    libraryVersion = '2.4.0.1'
+    libraryVersion = '2.5.0.0'
 
-    pomVersion = '2.4.0.1'
+    pomVersion = '2.5.0.0'
     pomGroupID = 'com.lotame'
 
     developerId = 'Lotame'

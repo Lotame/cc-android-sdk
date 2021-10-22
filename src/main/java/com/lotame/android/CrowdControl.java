@@ -250,6 +250,31 @@ public class CrowdControl {
         init(ctx, clientId, clientId, protocol, domain, false);
     }
 
+    /**
+     *
+     * @param ctx
+     * @param clientId
+     * @param audienceExtractionClientId
+     * @param protocol
+     * @param enablePanoramaId
+     */
+    public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, boolean enablePanoramaId) {
+        init(ctx, clientId, audienceExtractionClientId, protocol, DEFAULT_DOMAIN, enablePanoramaId);
+    }
+
+    /**
+     *
+     * @param ctx
+     * @param clientId
+     * @param audienceExtractionClientId
+     * @param protocol
+     * @param domain
+     * @param enablePanoramaId
+     */
+    public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, String domain, boolean enablePanoramaId) {
+        init(ctx, clientId, audienceExtractionClientId, protocol, domain, enablePanoramaId);
+    }
+
     private void init(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, String domain, boolean enablePanoramaId) {
         setInitialized(false);
         this.setContext(ctx);
