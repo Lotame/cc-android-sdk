@@ -204,8 +204,8 @@ public class CrowdControl {
      * constructor will instantiate a CrowdControl instance configured to
      * make calls using the {@link #PROTOCOL_DEFAULT} setting.
      *
-     * @param ctx
-     * @param clientId
+     * @param ctx Android Context object
+     * @param clientId Lotame client id
      */
     public CrowdControl(Context ctx, int clientId) {
         this(ctx, clientId, PROTOCOL_DEFAULT);
@@ -227,9 +227,9 @@ public class CrowdControl {
      * Constructs a CrowdControl instance for the supplied client id that
      * is configured with the supplied {@link Protocol} [http|https].
      *
-     * @param ctx
-     * @param clientId
-     * @param protocol
+     * @param ctx Android context object
+     * @param clientId client id
+     * @param protocol http or https
      */
     public CrowdControl(Context ctx, int clientId, Protocol protocol) {
         this(ctx, clientId, protocol, DEFAULT_DOMAIN);
@@ -241,10 +241,10 @@ public class CrowdControl {
      * the supplied first party domain. The domain specified will be
      * prefaced with either "bcp" or "ad" based on the type of call to make.
      *
-     * @param ctx
-     * @param clientId
-     * @param protocol
-     * @param domain
+     * @param ctx Android contect object
+     * @param clientId Lotame client id
+     * @param protocol http or https
+     * @param domain lotame edge domain
      */
     public CrowdControl(Context ctx, int clientId, Protocol protocol, String domain) {
         init(ctx, clientId, clientId, protocol, domain, false);
@@ -252,11 +252,11 @@ public class CrowdControl {
 
     /**
      *
-     * @param ctx
-     * @param clientId
-     * @param audienceExtractionClientId
-     * @param protocol
-     * @param enablePanoramaId
+     * @param ctx Android context object
+     * @param clientId Lotame client id for data collection
+     * @param audienceExtractionClientId Lotame client id for audience extraction
+     * @param protocol http or https
+     * @param enablePanoramaId enable Lotame panorama id
      */
     public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, boolean enablePanoramaId) {
         init(ctx, clientId, audienceExtractionClientId, protocol, DEFAULT_DOMAIN, enablePanoramaId);
@@ -264,12 +264,12 @@ public class CrowdControl {
 
     /**
      *
-     * @param ctx
-     * @param clientId
-     * @param audienceExtractionClientId
-     * @param protocol
-     * @param domain
-     * @param enablePanoramaId
+     * @param ctx Android context object
+     * @param clientId Lotame client id for data collection
+     * @param audienceExtractionClientId Lotame client id for audience extraction
+     * @param protocol http or https
+     * @param domain Lotame edge domain
+     * @param enablePanoramaId enable Lotame panorama id
      */
     public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, String domain, boolean enablePanoramaId) {
         init(ctx, clientId, audienceExtractionClientId, protocol, domain, enablePanoramaId);
@@ -480,7 +480,7 @@ public class CrowdControl {
      * method returns true in {@link #add(String, String)}, it will return
      * without collecting any data.
      *
-     * @param id
+     * @param id Lotame behavior id
      */
     public void addBehavior(long id) {
         add(KEY_BEHAVIOR_ID, String.valueOf(id));
@@ -505,9 +505,10 @@ public class CrowdControl {
      * 
      * If {@link #isInitialized()} returns false, the method will also return
      * null without making an extraction call.
-     *
+     * @param timeout timeout value
+     * @param timeUnit timeout value unit
      * @return String the string representation of a JSON object.
-     * @throws IOException
+     * @throws IOException in case of trouble extracting audiences from Lotame edge servers
      */
     public String getAudienceJSON(long timeout, TimeUnit timeUnit) throws IOException {
 
@@ -550,7 +551,7 @@ public class CrowdControl {
      * If {@link #isInitialized()} returns false, the method will also silently
      * return without collecting any data.
      *
-     * @throws IOException
+     * @throws IOException thrown when there the call to Lotame edge servers fails
      */
     public synchronized void bcp() throws IOException {
         if (isLimitedAdTrackingEnabled() || !isInitialized()) {
@@ -593,6 +594,9 @@ public class CrowdControl {
      * Send an HTTP or HTTPs request using the supplied URL pattern.
      * This pattern can contain two replacement macros, {deviceid} and {deviceidtype},
      * which will be replaced before performing the HTTP(s) call.
+     *
+     * @param urlPattern patten to send to Lotame
+     * @throws Exception on errors
      */
     public void sendRequest(String urlPattern) throws Exception {
 
