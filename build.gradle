@@ -30,9 +30,9 @@ ext {
     githubRepository= 'Lotame/cc-android-sdk'
 
     libraryVersionCode = 6
-    libraryVersion = '2.5.0.0'
+    libraryVersion = '2.6.0.0'
 
-    pomVersion = '2.5.0.0'
+    pomVersion = '2.6.0.0'
     pomGroupID = 'com.lotame'
 
     developerId = 'Lotame'
@@ -45,12 +45,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
     buildToolsVersion '25.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode project.ext.libraryVersionCode
         versionName "${project.ext.libraryVersion}"
     }
