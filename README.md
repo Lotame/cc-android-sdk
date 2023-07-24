@@ -7,12 +7,28 @@ This project contains Lotame Platform Android SDK jar to be provided to clients 
 Add the library as a dependency in gradle, it is in jcenter and maven central:
 
 ```
-compile 'com.lotame:cc-android-sdk:2.5.0.0@aar'
+compile 'com.lotame:cc-android-sdk:2.7.0.0@aar'
 ```
 
 Alternatively, you can build the jar manually from the code with `./gradlew clean jar`. The jar file
 will be available in the build\libs directory. Then you can add that jar as a library to another project.
 
+### Google AdMob registration
+As of version 2.7.0.0, you'll need to specify an AdMob application id in your projects manifest file like so:
+```
+<application>
+   ...
+   ...
+   < meta-data 
+        android:name="com.google.android.gms.ads.APPLICATION_ID" 
+        android:value="ca-app-pub-################~##########"/> 
+   ...
+   ...   
+</application>
+```
+See [this](https://admob.google.com/home/admob-advantage/) link for details on how to create an Id. The Lotame Android SDK uses the google play library to access the Android advertising id.
+
+### Code Pattern
 Incorporate the following general pattern into your app to collect and transmit data to Lotame, replacing CLIENT_ID with the id provided by Lotame: 
 ```
 import java.io.IOException;
