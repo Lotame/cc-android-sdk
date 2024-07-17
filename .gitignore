@@ -1,3 +1,18 @@
+# Ignoring all gradle files to prevent unexpected behavior
+*.gradle
+.properties
+.bat
+gradle*
+*/crowdcontrol/gradlew
+*/crowdcontrol/.idea*
+*/crowdcontrol/gradle-wrapper.jar
+
+# Excluding xml, as there are no res files and we will want to define our manifests and IDE/Project configs
+*.xml
+
+# Leaving all existing git ignores in place
+
+
 bintray.properties
 # Built application files
 *.apk
