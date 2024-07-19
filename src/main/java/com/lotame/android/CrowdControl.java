@@ -46,27 +46,27 @@ import java.util.concurrent.TimeUnit;
  * Lotame Platform data collection and audience extraction API for Android. This
  * library provides methods to collect, transmit, and extract data managed by
  * the Lotame Platform.
- *
+ * 
  * The SDK will attempt to access the Google Advertising ID and the Limit Ad
  * Tracking user preferences.  These are specific to platforms running the
  * Google Play Services 4.0+.  If the SDK determines that the Limit Ad Tracking
  * preference is set to true, the SDK will NOT collect, send, or extract any
  * Crowd Control managed data.
- *
+ * 
  * The SDK does provide a mechanism for the client to determine whether or not
  * an Advertising ID was gleaned, {@link #isGoogleAdvertiserIdAvailable()},
  * and whether or not the user has opted-out of ad collection,
  * {@link #isLimitedAdTrackingEnabled()}.
- *
+ * 
  * Client code should check that the value of {@link #isInitialized()} is true
  * before attempting to send data or extract audience segments.  Adding data to
  * the CrowdControl instance via {@link #add(String, String)},
  * {@link #addBehavior(long)}, or {@link #addOpportunity(long)} is permitted
  * prior to the CrowdControl instance returning true for
  * {@link #isInitialized()}.
- *
+ * 
  * The general pattern of use is:
- *
+ * 
  * <pre>
  *  {#code
  *  CrowdControl cc = new CrowdControl(this, CLIENT_ID);
@@ -80,7 +80,7 @@ import java.util.concurrent.TimeUnit;
  *  cc.bcp();
  * }
  * </pre>
- *
+ * 
  * By default instances of CrowdControl will make bcp and extraction calls over
  * HTTPS.
  * 
