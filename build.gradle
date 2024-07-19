@@ -1,81 +1,21 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
-    }
-}
-
-plugins {
-    id 'maven-publish'
-}
-
 apply plugin: 'com.android.library'
 
-ext {
-    bintrayRepo = 'cc-android-sdk'
-    bintrayName = 'cc-android-sdk'   // Has to be same as your library module name
-
-    publishedGroupId = 'com.lotame'
-    libraryName = 'LotameAndroidSDK'
-    artifact = 'cc-android-sdk'     // Has to be same as your library module name
-
-    libraryDescription = 'Lotame Platform Android SDK that enables sending data to Lotame from Android mobile apps.'
-
-    // Your github repo link
-    siteUrl = 'https://github.com/Lotame/cc-android-sdk'
-    gitUrl = 'https://github.com/Lotame/cc-android-sdk.git'
-    githubRepository= 'Lotame/cc-android-sdk'
-
-    libraryVersionCode = 7
-    libraryVersion = '2.7.0.0'
-
-    pomVersion = '2.7.0.0'
-    pomGroupID = 'com.lotame'
-
-    developerId = 'Lotame'
-    developerName = 'Lotame'
-    developerEmail = 'info@lotame.com'
-
-    licenseName = 'MIT License'
-    licenseUrl = 'https://opensource.org/licenses/MIT'
-    allLicenses = ["MIT"]
-}
-
 android {
-    compileSdkVersion 33
+  compileSdk androidCompileSdkVersion
 
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 33
-        versionCode project.ext.libraryVersionCode
-        versionName "${project.ext.libraryVersion}"
-    }
-}
+  defaultConfig {
+    minSdkVersion androidMinSdkVersion
+    targetSdkVersion androidTargetSdkVersion
+  }
 
-task jar(type: Jar) {
-    archiveName "cc-android-sdk-${project.ext.libraryVersion}.jar"
-    from android.sourceSets.main.java.srcDirs
-}
+  compileOptions {
+    sourceCompatibility jvmTargetVersion
+    targetCompatibility jvmTargetVersion
+  }
 
-android.libraryVariants.all { variant ->
-    def name = variant.buildType.name
-    def task = project.tasks.create "jar${name.capitalize()}", Jar
-    task.dependsOn variant.javaCompileProvider
-    task.from variant.javaCompile.destinationDirectory
-    artifacts.add('archives', task)
+  namespace "com.lotame.android"
 }
 
 dependencies {
-    api 'androidx.appcompat:appcompat:1.0.0'
-    api 'com.google.android.gms:play-services-ads-lite:22.2.0'
+  implementation 'com.google.android.gms:play-services-ads-lite:22.2.0'
 }
-
-repositories {
-    mavenCentral()
-    google()
-}
-
-apply from: 'maven-install.gradle'

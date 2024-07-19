@@ -46,27 +46,27 @@ import java.util.concurrent.TimeUnit;
  * Lotame Platform data collection and audience extraction API for Android. This
  * library provides methods to collect, transmit, and extract data managed by
  * the Lotame Platform.
- * 
+ *
  * The SDK will attempt to access the Google Advertising ID and the Limit Ad
  * Tracking user preferences.  These are specific to platforms running the
  * Google Play Services 4.0+.  If the SDK determines that the Limit Ad Tracking
  * preference is set to true, the SDK will NOT collect, send, or extract any
  * Crowd Control managed data.
- * 
+ *
  * The SDK does provide a mechanism for the client to determine whether or not
  * an Advertising ID was gleaned, {@link #isGoogleAdvertiserIdAvailable()},
  * and whether or not the user has opted-out of ad collection,
  * {@link #isLimitedAdTrackingEnabled()}.
- * 
+ *
  * Client code should check that the value of {@link #isInitialized()} is true
  * before attempting to send data or extract audience segments.  Adding data to
  * the CrowdControl instance via {@link #add(String, String)},
  * {@link #addBehavior(long)}, or {@link #addOpportunity(long)} is permitted
  * prior to the CrowdControl instance returning true for
  * {@link #isInitialized()}.
- * 
+ *
  * The general pattern of use is:
- * 
+ *
  * <pre>
  *  {#code
  *  CrowdControl cc = new CrowdControl(this, CLIENT_ID);
@@ -80,13 +80,13 @@ import java.util.concurrent.TimeUnit;
  *  cc.bcp();
  * }
  * </pre>
- * 
+ *
  * By default instances of CrowdControl will make bcp and extraction calls over
  * HTTPS.
- * 
+ *
  * Instantiating with an instance of {@link CrowdControl.Protocol}, will enable
  * the use of either http or https.
- * 
+ *
  * <pre>
  * {#code
  * // Instantiate a cc instance configured for https calls.
@@ -118,9 +118,9 @@ public class CrowdControl {
     private static final String KEY_COUNT_PLACEMENTS = "dp";
     private static final String KEY_CLIENT_ID = "c";
     private static final String KEY_RAND_NUMBER = "rand";
-    private static final String KEY_ID = "mid";
+    private static final String KEY_ID = "uid";
     private static final String KEY_ENV_ID = "e";
-    private static final String KEY_DEVICE_TYPE = "dt";
+    private static final String KEY_DEVICE_TYPE = "ua";
     private static final String KEY_SDK_VERSION = "sdk";
     private static final String KEY_PANORAMA_ID =  "rid";
 
@@ -336,7 +336,6 @@ public class CrowdControl {
                     appendParameter(new AtomParameter(KEY_CLIENT_ID, String.valueOf(getClientId())));
                     appendParameter(new AtomParameter(KEY_ID, getId(), AtomParameter.Type.ID));
                     appendParameter(new AtomParameter(KEY_DEVICE_TYPE, getIdType().toString()));
-                    appendParameter(new AtomParameter(KEY_SDK_VERSION, SDK_VERSION));
                     appendParameter(new AtomParameter(KEY_ENV_ID, VALUE_APP));
 
                     if (CrowdControl.debug) Log.d(CrowdControl.LOG_TAG, "using id of " + getId() +
@@ -413,7 +412,7 @@ public class CrowdControl {
     /**
      * Will return either the Advertiser ID or the SHA-1 hash of the value
      * returned by the Secure.ANDROID_ID android field.
-     * 
+     *
      * This method always returns immediately, whether or not the id field
      * has yet been populated by the completion of the construction of the
      * CrowdControl instance.
@@ -447,7 +446,7 @@ public class CrowdControl {
 
     /**
      * Adds key/value to track. This can be called multiple times to add multiple behaviors to track.
-     * 
+     *
      * If the {@link #isLimitedAdTrackingEnabled()} returns true, this method
      * will return without collecting any data.
      *
@@ -474,7 +473,7 @@ public class CrowdControl {
     /**
      * Add a behavior to track by id. This is only honored if the CLIENT_ID used to construct the library has access to the behavior with
      * the supplied id. This can be called multiple times to add multiple behaviors to track.
-     * 
+     *
      * This method, in turn, calls the {@link #add(String, String)} method,
      * which will check the {@link #isLimitedAdTrackingEnabled()}.  If that
      * method returns true in {@link #add(String, String)}, it will return
@@ -499,10 +498,10 @@ public class CrowdControl {
     /**
      * Synchronously retrieve audience membership. The JSON format is described at
      * <a href="https://my.lotame.com/t/x2hx20x/audience-extraction-api">Audience Extraction API</a>
-     * 
+     *
      * If {@link #isLimitedAdTrackingEnabled()} returns true, this method
      * will return null without making an audience extraction call.
-     * 
+     *
      * If {@link #isInitialized()} returns false, the method will also return
      * null without making an extraction call.
      * @param timeout timeout value
@@ -544,10 +543,10 @@ public class CrowdControl {
     /**
      * Synchronously send the data to the Crowd Control servers. To send
      * asynchronously, use {@link #bcpAsync()}.
-     * 
+     *
      * If {@link #isLimitedAdTrackingEnabled()} returns true, this method will
      * silently return without collecting any data.
-     * 
+     *
      * If {@link #isInitialized()} returns false, the method will also silently
      * return without collecting any data.
      *
@@ -567,10 +566,10 @@ public class CrowdControl {
 
     /**
      * Send the data to the Crowd Control servers.
-     * 
+     *
      * If {@link #isLimitedAdTrackingEnabled()} returns true, this method will
      * return null without collecting any data.
-     * 
+     *
      * If {@link #isInitialized()} returns false, the method will also silently
      * return without collecting any data.
      *
@@ -670,7 +669,7 @@ public class CrowdControl {
      * Indicates whether the CrowdControl instance has completed it's
      * initialization and whether it is ready to send and extract audience
      * data.
-     * 
+     *
      * Until isInitialized() returns true, no behavior data can be sent, or
      * audience data extracted.  Adding data vi via
      * {@link #add(String, String)}, {@link #addBehavior(long)}, or
