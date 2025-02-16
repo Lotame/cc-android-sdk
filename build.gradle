@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:8.8.0'
     }
 }
 
@@ -29,10 +29,10 @@ ext {
     gitUrl = 'https://github.com/Lotame/cc-android-sdk.git'
     githubRepository= 'Lotame/cc-android-sdk'
 
-    libraryVersionCode = 7
-    libraryVersion = '2.7.0.0'
+    libraryVersionCode = 8
+    libraryVersion = '2.8.0.0'
 
-    pomVersion = '2.7.0.0'
+    pomVersion = '2.8.0.0'
     pomGroupID = 'com.lotame'
 
     developerId = 'Lotame'
@@ -45,32 +45,42 @@ ext {
 }
 
 android {
-    compileSdkVersion 33
+    namespace = "com.lotame.android"
+    compileSdk 35
+    buildToolsVersion = "35.0.1"
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 33
+        minSdk 14
+        targetSdk 35
         versionCode project.ext.libraryVersionCode
         versionName "${project.ext.libraryVersion}"
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
 
-task jar(type: Jar) {
-    archiveName "cc-android-sdk-${project.ext.libraryVersion}.jar"
-    from android.sourceSets.main.java.srcDirs
-}
-
-android.libraryVariants.all { variant ->
+android.libraryVariants.configureEach { variant ->
     def name = variant.buildType.name
-    def task = project.tasks.create "jar${name.capitalize()}", Jar
-    task.dependsOn variant.javaCompileProvider
-    task.from variant.javaCompile.destinationDirectory
-    artifacts.add('archives', task)
+
+    project.tasks.register("jar${name.capitalize()}", Jar) {
+        archiveFileName = "cc-android-sdk-${project.ext.libraryVersion}.jar"
+        dependsOn variant.javaCompileProvider
+        from variant.javaCompile.destinationDirectory
+    }
+
+    variant.outputs.all { file ->
+        if (file.outputFileName.endsWith('.aar')) {
+            file.outputFileName = "cc-android-sdk-${project.ext.libraryVersion}.aar"
+        }
+    }
 }
 
 dependencies {
-    api 'androidx.appcompat:appcompat:1.0.0'
-    api 'com.google.android.gms:play-services-ads-lite:22.2.0'
+    api 'androidx.appcompat:appcompat:1.7.0'
+    api 'com.google.android.gms:play-services-ads-lite:23.6.0'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.2.0'
 }
 
 repositories {

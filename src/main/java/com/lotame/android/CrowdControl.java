@@ -118,9 +118,9 @@ public class CrowdControl {
     private static final String KEY_COUNT_PLACEMENTS = "dp";
     private static final String KEY_CLIENT_ID = "c";
     private static final String KEY_RAND_NUMBER = "rand";
-    private static final String KEY_ID = "mid";
+    private static final String KEY_ID = "uid";
     private static final String KEY_ENV_ID = "e";
-    private static final String KEY_DEVICE_TYPE = "dt";
+    private static final String KEY_DEVICE_TYPE = "ua";
     private static final String KEY_SDK_VERSION = "sdk";
     private static final String KEY_PANORAMA_ID =  "rid";
 
@@ -156,7 +156,7 @@ public class CrowdControl {
      */
     public enum IdType {
         // These values match the com.lotame.profile.proto.Profile.proto.DeviceType
-        SHA1, GAID;
+        SHA1, GAID, CHRM;
     }
 
     /**
@@ -220,7 +220,7 @@ public class CrowdControl {
     }
 
     public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, boolean enablePanoramaId) {
-        init(ctx, clientId, audienceExtractionClientId, PROTOCOL_DEFAULT, DEFAULT_DOMAIN, enablePanoramaId);
+        init(ctx, clientId, audienceExtractionClientId, PROTOCOL_DEFAULT, DEFAULT_DOMAIN, enablePanoramaId, null);
     }
 
     /**
@@ -237,6 +237,19 @@ public class CrowdControl {
 
     /**
      * Constructs a CrowdControl instance for the supplied client id that
+     * is configured with the supplied {@link Protocol} [http|https] and {@link IdType}.
+     *
+     * @param ctx Android context object
+     * @param clientId client id
+     * @param protocol http or https
+     * @param idType Lotame id type
+     */
+    public CrowdControl(Context ctx, int clientId, Protocol protocol, IdType idType) {
+        init(ctx, clientId, clientId, protocol, DEFAULT_DOMAIN, false, idType);
+    }
+
+    /**
+     * Constructs a CrowdControl instance for the supplied client id that
      * is configured with the supplied {@link Protocol} [http|https] and
      * the supplied first party domain. The domain specified will be
      * prefaced with either "bcp" or "ad" based on the type of call to make.
@@ -247,7 +260,7 @@ public class CrowdControl {
      * @param domain lotame edge domain
      */
     public CrowdControl(Context ctx, int clientId, Protocol protocol, String domain) {
-        init(ctx, clientId, clientId, protocol, domain, false);
+        init(ctx, clientId, clientId, protocol, domain, false, null);
     }
 
     /**
@@ -259,7 +272,7 @@ public class CrowdControl {
      * @param enablePanoramaId enable Lotame panorama id
      */
     public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, boolean enablePanoramaId) {
-        init(ctx, clientId, audienceExtractionClientId, protocol, DEFAULT_DOMAIN, enablePanoramaId);
+        init(ctx, clientId, audienceExtractionClientId, protocol, DEFAULT_DOMAIN, enablePanoramaId, null);
     }
 
     /**
@@ -272,10 +285,24 @@ public class CrowdControl {
      * @param enablePanoramaId enable Lotame panorama id
      */
     public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, String domain, boolean enablePanoramaId) {
-        init(ctx, clientId, audienceExtractionClientId, protocol, domain, enablePanoramaId);
+        init(ctx, clientId, audienceExtractionClientId, protocol, domain, enablePanoramaId, null);
     }
 
-    private void init(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, String domain, boolean enablePanoramaId) {
+    /**
+     *
+     * @param ctx Android context object
+     * @param clientId Lotame client id for data collection
+     * @param audienceExtractionClientId Lotame client id for audience extraction
+     * @param protocol http or https
+     * @param domain Lotame edge domain
+     * @param enablePanoramaId enable Lotame panorama id
+     * @param idType Lotame id type
+     */
+    public CrowdControl(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, String domain, boolean enablePanoramaId, IdType idType) {
+        init(ctx, clientId, audienceExtractionClientId, protocol, domain, enablePanoramaId, idType);
+    }
+
+    private void init(Context ctx, int clientId, int audienceExtractionClientId, Protocol protocol, String domain, boolean enablePanoramaId, IdType idType) {
         setInitialized(false);
         this.setContext(ctx);
         this.clientId = clientId;
@@ -304,7 +331,7 @@ public class CrowdControl {
                 // Set the id to a default value that we will be able to use
                 // regardless of what happens in the try block.
                 String id = Utils.getUuid(contextFinal);
-                IdType idType = IdType.SHA1;
+                IdType mIdType = idType != null ? idType : IdType.SHA1;
                 try {
                     Info adInfo = null;
                     adInfo = AdvertisingIdClient.getAdvertisingIdInfo(contextFinal);
@@ -315,7 +342,10 @@ public class CrowdControl {
                         setGoogleAdvertiserIdAvailable(true);
                         setLimitedAdTrackingEnabled(adInfo.isLimitAdTrackingEnabled());
                         id = adInfo.getId();
-                        idType = IdType.GAID;
+
+                        if (idType == null)
+                            mIdType = IdType.GAID;
+
                         if (CrowdControl.debug)
                             Log.d(CrowdControl.LOG_TAG, "AdvertiserId  = " + id);
                         if (CrowdControl.debug)
@@ -330,7 +360,7 @@ public class CrowdControl {
                         Log.d(CrowdControl.LOG_TAG, "Exception thrown attempting to access Google Play Service to retrieve AdvertiserId data; e = " + e.toString());
                 } finally {
 
-                    setIdAndType(id, idType);
+                    setIdAndType(id, mIdType);
 
                     url = new StringBuilder(protocolFinal.getProtocString() + "://" + BCP_SUBDOMAIN + getDomain() + "/" + BCP_SERVLET + "/");
                     appendParameter(new AtomParameter(KEY_CLIENT_ID, String.valueOf(getClientId())));
@@ -381,6 +411,7 @@ public class CrowdControl {
      * @return Object null
      * @deprecated HttpParams is deprecated and should not be used. Use @setRequestProperty instead
      */
+    @Deprecated
     public Object getHttpParams() {
         return null;
     }
