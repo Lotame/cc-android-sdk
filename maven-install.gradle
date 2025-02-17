@@ -29,7 +29,8 @@ if (secretPropsFile.exists()) {
 
 task androidJavadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    // classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += files("${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar")
     android.libraryVariants.all { variant ->
         if (variant.name == 'release') {
             owner.classpath += variant.javaCompileProvider.get().classpath
@@ -52,12 +53,12 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                groupId project.ext.pomGroupID
-                artifactId project.name
-                version project.ext.pomVersion
+                groupId = project.ext.pomGroupID
+                artifactId = project.name
+                version = project.ext.pomVersion
 
                 // Two artifacts, the `aar` and the sources
-                artifact("${buildDir}/outputs/aar/${project.getName()}-release.aar")
+                artifact("${buildDir}/outputs/aar/${project.getName()}-${project.ext.libraryVersion}.aar")
                 artifact androidSourcesJar
                 artifact androidJavadocsJar
 
@@ -116,8 +117,8 @@ afterEvaluate {
 
                 // The username and password we've fetched earlier
                 credentials {
-                    username ossrhUsername
-                    password ossrhPassword
+                    username = ossrhUsername
+                    password = ossrhPassword
                 }
             }
         }
@@ -125,5 +126,6 @@ afterEvaluate {
 }
 
 signing {
+    useGpgCmd()
     sign publishing.publications
 }

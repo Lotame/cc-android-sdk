@@ -46,12 +46,12 @@ ext {
 
 android {
     namespace = "com.lotame.android"
-    compileSdk 35
+    compileSdk = 35
     buildToolsVersion = "35.0.1"
 
     defaultConfig {
-        minSdk 14
-        targetSdk 35
+        minSdk = 14
+        targetSdk = 35
         versionCode project.ext.libraryVersionCode
         versionName "${project.ext.libraryVersion}"
     }
