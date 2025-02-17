@@ -7,7 +7,7 @@ This project contains Lotame Platform Android SDK jar to be provided to clients 
 Add the library as a dependency in gradle, it is in jcenter and maven central:
 
 ```
-compile 'com.lotame:cc-android-sdk:2.7.0.0@aar'
+compile 'com.lotame:cc-android-sdk:2.8.0.0@aar'
 ```
 
 Alternatively, you can build the jar manually from the code with `./gradlew clean jar`. The jar file
